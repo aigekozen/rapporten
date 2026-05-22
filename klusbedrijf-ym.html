@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Vindbaarheid Rapport — Klusbedrijf YM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--g:#515545;--g2:#3d6b4a;--r:#8B3A2A;--o:#b87320;--bg:#f5f5f0;--grijs:#e0e0d8;--tekst:#1a1a18;--wit:#ffffff}
+html{background:#e8e8e0}
+body{font-family:'DM Sans',sans-serif;color:var(--tekst);font-size:14px;line-height:1.6;max-width:780px;margin:0 auto;background:var(--bg);box-shadow:0 0 80px rgba(0,0,0,0.18)}
+.hdr{background:var(--g);color:#fff;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}
+.hdr-left{display:flex;align-items:center;gap:16px}
+.logo-cirkel{width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:700;flex-shrink:0;letter-spacing:1px}
+.hdr-naam{font-family:'Fraunces',serif;font-size:24px;font-weight:600;line-height:1.1}
+.hdr-sub{font-size:12px;opacity:0.6;margin-top:3px}
+.hdr-right{text-align:right}
+.hdr-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;opacity:0.5}
+.hdr-datum{font-size:13px;opacity:0.8;margin-top:3px}
+.score-blok{background:var(--r);color:#fff;padding:28px 40px;display:flex;align-items:center;gap:28px}
+.score-cirkel{width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.15);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.score-nr{font-family:'Fraunces',serif;font-size:34px;line-height:1;font-weight:700}
+.score-van{font-size:9px;opacity:0.6;margin-top:3px;letter-spacing:1px}
+.score-tekst h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:8px}
+.score-tekst p{font-size:13px;line-height:1.7;opacity:0.9;max-width:520px}
+.legenda{display:flex;gap:4px;margin-top:12px}
+.lb{height:5px;border-radius:3px}
+.lb.r{background:#c0392b;flex:3}.lb.o{background:#e67e22;flex:2}.lb.gn{background:#27ae60;flex:2}
+.leg-labels{display:flex;justify-content:space-between;margin-top:4px}
+.leg-l{font-size:8px;opacity:0.5}
+.blokkade{background:#fffae8;border-left:4px solid var(--o);padding:14px 40px;font-size:13px;color:#5a4010;line-height:1.7}
+.sectie{padding:24px 40px;border-bottom:1px solid var(--grijs)}
+.s-kop{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--g);font-weight:600;margin-bottom:16px;opacity:0.8}
+.pos-rij{display:grid;grid-template-columns:160px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--grijs);font-size:13px}
+.pos-rij:last-of-type{border-bottom:none}
+.pos-term{font-weight:600}
+.pos-detail{color:#666;line-height:1.5}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;white-space:nowrap}
+.badge-r{background:#f5ddd9;color:var(--r)}
+.pos-box{margin-top:12px;padding:12px 16px;font-size:12.5px;line-height:1.7}
+.pos-tip{background:#eef5f0;border-left:3px solid var(--g2);color:#2a4a35}
+.pos-alert{background:#fff8e8;border-left:3px solid var(--o);color:#5a4010;margin-top:8px}
+.pijler{margin-bottom:18px}
+.pijler:last-child{margin-bottom:0}
+.pijler-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.pijler-naam{font-weight:600;font-size:14px;color:var(--g)}
+.pijler-tot{font-size:12px;font-weight:600}
+.subscore{display:grid;grid-template-columns:1fr 120px 72px;align-items:center;gap:12px;padding:5px 0 5px 12px;border-left:2px solid var(--grijs);margin-bottom:4px}
+.ss-naam{font-size:12.5px;color:#555}
+.balk-wrap{height:7px;background:var(--grijs);border-radius:4px;overflow:hidden}
+.balk{height:100%;border-radius:4px}
+.balk.g{background:var(--g2)}.balk.o{background:var(--o)}.balk.r{background:var(--r)}
+.ss-pts{font-size:11px;font-weight:600;text-align:right;white-space:nowrap}
+.ss-pts.g{color:var(--g2)}.ss-pts.o{color:var(--o)}.ss-pts.r{color:var(--r)}
+.divider{height:3px;background:linear-gradient(90deg,var(--g) 0%,var(--g2) 100%);opacity:0.25}
+.vp-intro{font-size:13px;color:#555;line-height:1.7;margin-bottom:20px;padding:12px 16px;background:#f0f0ea;border-left:3px solid var(--g)}
+.vp-sectie{margin-bottom:20px}
+.vp-sectie:last-child{margin-bottom:0}
+.vp-titel{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--g);font-weight:600;opacity:0.8;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--grijs)}
+.vp-punt{font-size:13px;color:var(--tekst);line-height:1.6;margin-bottom:8px;padding-left:14px;position:relative}
+.vp-punt::before{content:"→";position:absolute;left:0;color:var(--g);font-weight:700}
+.vp-punt:last-child{margin-bottom:0}
+.prognose-inline{background:#eeeee8;padding:14px 16px;margin-bottom:12px;font-size:13px;line-height:1.7;display:flex;gap:12px;align-items:center}
+.prognose-pijl{font-size:28px;color:var(--g);flex-shrink:0;line-height:1}
+.prognose-inline strong{color:var(--g)}
+.reken{font-size:14px;line-height:1.7;color:var(--tekst);margin-bottom:16px;padding:14px 16px;background:var(--wit);border:1px solid var(--grijs)}
+.reken strong{font-family:'Fraunces',serif;font-size:15px;display:block;margin-bottom:4px;color:var(--g)}
+.cta-groen{background:var(--g);color:#fff;padding:28px 40px}
+.cta-groen h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px}
+.cta-sub{font-size:13px;opacity:0.82;margin-bottom:14px}
+.cta-list{list-style:none}
+.cta-list li{padding:7px 0 7px 20px;position:relative;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.12);opacity:0.9}
+.cta-list li:last-child{border-bottom:none}
+.cta-list li::before{content:"→";position:absolute;left:0;color:rgba(255,255,255,0.6);font-weight:700}
+.cta-structuur{font-size:13px;opacity:0.75;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15)}
+.afsluiting{background:var(--bg);padding:20px 40px;border-bottom:1px solid var(--grijs);font-size:14px;line-height:2}
+.footer{background:var(--g);padding:16px 40px;display:flex;justify-content:space-between;align-items:center}
+.footer-m{color:#fff;font-size:14px;font-weight:600}
+.footer-k{color:rgba(255,255,255,0.4);font-size:10px;text-align:right;line-height:1.6}
+@media(max-width:600px){
+  .hdr,.score-blok,.sectie,.cta-groen,.afsluiting,.footer,.blokkade{padding-left:20px;padding-right:20px}
+  .score-blok{flex-direction:column;align-items:flex-start;gap:16px}
+  .pos-rij{grid-template-columns:1fr auto;gap:8px}
+  .pos-detail{display:none}
+  .subscore{grid-template-columns:1fr 80px 58px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="logo-cirkel">YM</div>
+    <div>
+      <div class="hdr-naam">Klusbedrijf YM</div>
+      <div class="hdr-sub">Malzwin 18, 8223 XE Lelystad &mdash; KVK 83288740</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-lbl">AI-Vindbaarheid Rapport</div>
+    <div class="hdr-datum">22 mei 2026</div>
+  </div>
+</div>
+
+<div class="score-blok">
+  <div>
+    <div class="score-cirkel">
+      <div class="score-nr">20</div>
+      <div class="score-van">VAN 100</div>
+    </div>
+    <div class="legenda">
+      <div class="lb r"></div><div class="lb o"></div><div class="lb gn"></div>
+    </div>
+    <div class="leg-labels">
+      <span class="leg-l">0</span><span class="leg-l">70</span><span class="leg-l">85</span><span class="leg-l">100</span>
+    </div>
+  </div>
+  <div class="score-tekst">
+    <h2>Onzichtbaar voor AI</h2>
+    <p>Klusbedrijf YM heeft een website en een Google Bedrijfsprofiel, maar de signalen die ChatGPT en Gemini gebruiken om je aan te bevelen ontbreken vrijwel volledig. Dat is op te lossen.</p>
+  </div>
+</div>
+
+<div class="blokkade">
+  <strong>Let op:</strong> Je website heeft geen technische herkenningscode. Daardoor kan Google je website niet volledig lezen. Dit is de grootste blokkade voor je score. Maximale score zonder deze code: 85 punten.
+</div>
+
+<div class="sectie">
+  <div class="s-kop">Waar sta je nu in ChatGPT en Google AI Overviews?</div>
+  <div class="pos-rij">
+    <div class="pos-term">"Elektricien"</div>
+    <div class="pos-detail">Rang 120 &mdash; Zichtbaarheid 0% &mdash; Concurrenten: Elektricien Unikol Lelystad (rang 1), YT Installatietechniek BV (rang 2)</div>
+    <div class="badge badge-r">Rang 120</div>
+  </div>
+  <div class="pos-rij">
+    <div class="pos-term">"Loodgieter"</div>
+    <div class="pos-detail">Rang 128 &mdash; Zichtbaarheid 0% &mdash; Concurrenten: Loodgieter Lelystad (rang 1), Loodgieter Lelystad Best Installatiebedrijf (rang 2)</div>
+    <div class="badge badge-r">Rang 128</div>
+  </div>
+  <div class="pos-box pos-tip" style="margin-top:14px">
+    <strong>Wat dit betekent:</strong> Klusbedrijf YM is op dit moment onzichtbaar voor mensen die via ChatGPT of Google zoeken naar een elektricien of loodgieter in Lelystad. De bedrijven bovenaan zijn geen betere vakmensen, maar bedrijven met een beter ingericht profiel.
+  </div>
+  <div class="pos-box pos-alert">
+    <strong>Kans:</strong> De concurrentie in Lelystad is op dit moment laag voor beide zoektermen. Wie nu handelt pakt die positie voordat anderen dat zien. Top 3 is haalbaar binnen 8 tot 12 weken.
+  </div>
+</div>
+
+<div class="sectie">
+  <div class="s-kop">Score per onderdeel</div>
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Staat je bedrijf overal hetzelfde?</div>
+      <div class="pijler-tot" style="color:var(--r)">5 van 30 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Naam, adres en telefoon consistent</div>
+      <div class="balk-wrap"><div class="balk r" style="width:25%"></div></div>
+      <div class="ss-pts r">5 van 20</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Aanwezig op Bing en Apple Kaarten</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 10</div>
+    </div>
+  </div>
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Kan Google en ChatGPT je website lezen?</div>
+      <div class="pijler-tot" style="color:var(--r)">4 van 25 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Technische herkenningscode aanwezig</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 15</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Structuur en inhoud website</div>
+      <div class="balk-wrap"><div class="balk o" style="width:40%"></div></div>
+      <div class="ss-pts o">4 van 10</div>
+    </div>
+  </div>
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Zien klanten dat je reageert?</div>
+      <div class="pijler-tot" style="color:var(--r)">0 van 25 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Reactiesnelheid en kwaliteit reviews</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 15</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Vragen en antwoorden in profiel</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 10</div>
+    </div>
+  </div>
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Bewijs je dat je actief bent?</div>
+      <div class="pijler-tot" style="color:var(--r)">0 van 15 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Foto-activiteit</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 10</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Video aanwezig</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 5</div>
+    </div>
+  </div>
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Is je profiel volledig ingevuld?</div>
+      <div class="pijler-tot" style="color:var(--r)">1 van 5 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Kenmerken aangevinkt in je profiel</div>
+      <div class="balk-wrap"><div class="balk r" style="width:20%"></div></div>
+      <div class="ss-pts r">1 van 5</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sectie">
+  <div class="s-kop">Wat er beter kan</div>
+
+  <div class="vp-intro">
+    ChatGPT en Gemini scannen bij elke zoekopdracht opnieuw of jouw bedrijf nog bestaat, actief is en betrouwbaar is. Dit zijn de actiepunten om je score te verhogen.
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Staat je bedrijf overal hetzelfde?</div>
+    <div class="vp-punt">Meld je aan op Telefoongids.nl en Telefoonboek.nl met je exacte bedrijfsnaam, adres en telefoonnummer. Je bent er nu niet op te vinden.</div>
+    <div class="vp-punt">Maak een account aan op bingplaces.com en registreer je op Apple Maps. ChatGPT gebruikt Bing als databron, dus zonder profiel daar ben je ook onzichtbaar voor AI.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Kan Google en ChatGPT je website lezen?</div>
+    <div class="vp-punt">Voeg een technische herkenningscode toe aan je website. Die code vertelt Google wie je bent, wat je doet en waar je werkt. Zonder die code kan Google je site niet volledig begrijpen.</div>
+    <div class="vp-punt">Voeg de naam Lelystad toe aan je hoofdkop en zet een FAQ-sectie op je website met de meest gestelde vragen van klanten.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Zien klanten dat je reageert?</div>
+    <div class="vp-punt">Stuur na elke klus een WhatsApp naar de klant met een directe link naar je Google-reviewpagina. Je hebt nu nul reviews. Concurrenten met 4.8 sterren pakken elke zoekopdracht die jij misloopt.</div>
+    <div class="vp-punt">Voeg minimaal vijf vragen en antwoorden toe aan je Google Bedrijfsprofiel, zoals "Werk je ook bij spoed?" en "Wat kost een lekkage reparatie in Lelystad?"</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Bewijs je dat je actief bent?</div>
+    <div class="vp-punt">Maak na elke klus een foto van het resultaat en upload die in je Google Bedrijfsprofiel. Eén foto per week laat zien dat je actief bent.</div>
+    <div class="vp-punt">Voeg minimaal één video toe aan je profiel. Dertig seconden van jezelf aan het werk is genoeg. Profielen met video scoren structureel hoger.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Is je profiel volledig ingevuld?</div>
+    <div class="vp-punt">Open je Google Bedrijfsprofiel en vul je openingstijden, diensten en werkgebied volledig in. Vink aan of je spoedwerk doet en of je gratis offertes geeft.</div>
+    <div class="vp-punt">Voeg alle relevante diensten toe: loodgieterswerk, elektra, airco, warmtepompen en badkamerrenovatie staan nu niet als losse diensten in je profiel.</div>
+  </div>
+
+  <div class="prognose-inline" style="margin-top:24px">
+    <div class="prognose-pijl">&#8599;</div>
+    <div>Als je deze stappen doorvoert stijgt je score naar <strong>85 van 100 punten</strong>. Dit brengt je in de top 3 van ChatGPT en Google AI Overviews voor "elektricien" en "loodgieter" in Lelystad.</div>
+  </div>
+
+  <div class="reken">
+    <strong>Een extra klus per maand dekt de volledige investering ruimschoots.</strong>
+    Een gemiddelde klus levert je 150 tot 400 euro op. Wie je vindt via ChatGPT of Google belt je rechtstreeks. Geen Werkspot, geen commissie.
+  </div>
+</div>
+
+<div class="cta-groen">
+  <h3>Wil je jouw score verhogen en wil je daar hulp bij?</h3>
+  <p class="cta-sub">Wij kunnen dit alles structureel voor je verzorgen, maandelijks, zodat jij je alleen op je werk hoeft te focussen. Dit is alles wat wij nodig hebben om te starten:</p>
+  <ul class="cta-list">
+    <li>Beheerderstoegang tot je Google Bedrijfsprofiel</li>
+    <li>10 minuten voor een korte vragenlijst die wij je toesturen</li>
+  </ul>
+  <div class="cta-structuur">Bij goede uitvoering is dit zichtbaar in ChatGPT en Google AI Overviews binnen 8 tot 12 weken.</div>
+</div>
+
+<div class="afsluiting">
+  <strong>Roland</strong><br>
+  06-20899392<br>
+  aigekozen.nl
+</div>
+
+<div class="footer">
+  <div class="footer-m">Aigekozen.nl</div>
+  <div class="footer-k">Rapport gegenereerd op 22 mei 2026<br>Gebaseerd op publieke data en door je aangeleverde informatie. Score is een indicatie.</div>
+</div>
+
+</body>
+</html>
