@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Vindbaarheid Rapport - JCR Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--g:#515545;--g2:#3d6b4a;--r:#8B3A2A;--o:#b87320;--bg:#f5f5f0;--grijs:#e0e0d8;--tekst:#1a1a18;--wit:#ffffff}
+html{background:#e8e8e0}
+body{font-family:"DM Sans",sans-serif;color:var(--tekst);font-size:14px;line-height:1.6;max-width:780px;margin:0 auto;background:var(--bg);box-shadow:0 0 80px rgba(0,0,0,0.18)}
+.hdr{background:var(--g);color:#fff;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}
+.hdr-left{display:flex;align-items:center;gap:16px}
+.logo-cirkel{width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-size:18px;font-weight:700;flex-shrink:0;letter-spacing:1px}
+.hdr-naam{font-family:"Fraunces",serif;font-size:24px;font-weight:600;line-height:1.1}
+.hdr-sub{font-size:12px;opacity:0.6;margin-top:3px}
+.hdr-right{text-align:right}
+.hdr-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;opacity:0.5}
+.hdr-datum{font-size:13px;opacity:0.8;margin-top:3px}
+.score-blok{background:var(--r);color:#fff;padding:28px 40px;display:flex;align-items:center;gap:28px}
+.score-cirkel{width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.15);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.score-nr{font-family:"Fraunces",serif;font-size:34px;line-height:1;font-weight:700}
+.score-van{font-size:9px;opacity:0.6;margin-top:3px;letter-spacing:1px}
+.score-tekst h2{font-family:"Fraunces",serif;font-size:22px;font-weight:600;margin-bottom:8px}
+.score-tekst p{font-size:13px;line-height:1.7;opacity:0.9;max-width:520px}
+.legenda{display:flex;gap:4px;margin-top:12px}
+.lb{height:5px;border-radius:3px}
+.lb.r{background:#c0392b;flex:3}.lb.o{background:#e67e22;flex:2}.lb.gn{background:#27ae60;flex:2}
+.leg-labels{display:flex;justify-content:space-between;margin-top:4px}
+.leg-l{font-size:8px;opacity:0.5}
+.cap-blok{background:#fff3cd;border-left:4px solid var(--o);padding:14px 40px;font-size:12.5px;line-height:1.7;color:#5a4010}
+.cap-blok strong{font-weight:600}
+.sectie{padding:24px 40px;border-bottom:1px solid var(--grijs)}
+.s-kop{font-family:"Fraunces",serif;font-size:17px;font-weight:600;color:var(--g);margin-bottom:16px;line-height:1.3}
+.pos-rij{display:grid;grid-template-columns:160px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--grijs);font-size:13px}
+.pos-rij:last-of-type{border-bottom:none}
+.pos-term{font-weight:600}
+.pos-detail{color:#666;line-height:1.5}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;white-space:nowrap}
+.badge-r{background:#f5ddd9;color:var(--r)}
+.badge-o{background:#fef3e2;color:var(--o)}
+.pos-box{margin-top:10px;padding:12px 16px;font-size:12.5px;line-height:1.7}
+.pos-betekent{background:#fff8e8;border-left:3px solid var(--o);color:#5a4010}
+.pos-kans{background:#eef5f0;border-left:3px solid var(--g2);color:#2a4a35;margin-top:8px}
+.pijler{margin-bottom:20px}
+.pijler:last-child{margin-bottom:0}
+.pijler-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.pijler-naam{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--g);font-weight:600;opacity:0.85}
+.pijler-tot{font-size:12px;font-weight:600}
+.subscore{display:grid;grid-template-columns:1fr 120px 72px;align-items:center;gap:12px;padding:5px 0 5px 12px;border-left:2px solid var(--grijs);margin-bottom:4px}
+.ss-naam{font-size:12.5px;color:#555}
+.balk-wrap{height:7px;background:var(--grijs);border-radius:4px;overflow:hidden}
+.balk{height:100%;border-radius:4px}
+.balk.g{background:var(--g2)}.balk.o{background:var(--o)}.balk.r{background:var(--r)}
+.ss-pts{font-size:11px;font-weight:600;text-align:right;white-space:nowrap}
+.ss-pts.g{color:var(--g2)}.ss-pts.o{color:var(--o)}.ss-pts.r{color:var(--r)}
+.ss-blokkade{font-size:11px;color:var(--o);font-weight:600;padding-left:12px;margin-top:2px;margin-bottom:6px}
+.divider{height:3px;background:linear-gradient(90deg,var(--g) 0%,var(--g2) 100%);opacity:0.25}
+.vp-intro{font-size:13px;color:#555;line-height:1.7;margin-bottom:20px;padding:12px 16px;background:#f0f0ea;border-left:3px solid var(--g)}
+.vp-sectie{margin-bottom:20px}
+.vp-sectie:last-child{margin-bottom:0}
+.vp-titel{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--g);font-weight:600;opacity:0.85;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--grijs)}
+.vp-punt{font-size:13px;color:var(--tekst);line-height:1.6;margin-bottom:8px;padding-left:14px;position:relative}
+.vp-punt::before{content:"\2192";position:absolute;left:0;color:var(--g);font-weight:700}
+.vp-punt:last-child{margin-bottom:0}
+.prognose-inline{background:#eeeee8;padding:14px 16px;margin-top:24px;font-size:13px;line-height:1.7;display:flex;gap:12px;align-items:center}
+.prognose-pijl{font-size:28px;color:var(--g);flex-shrink:0;line-height:1}
+.prognose-inline strong{color:var(--g)}
+.cta-groen{background:var(--g);color:#fff;padding:28px 40px}
+.cta-groen h3{font-family:"Fraunces",serif;font-size:22px;font-weight:600;margin-bottom:6px}
+.cta-sub{font-size:13px;opacity:0.82;margin-bottom:14px}
+.cta-list{list-style:none}
+.cta-list li{padding:7px 0 7px 20px;position:relative;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.12);opacity:0.9}
+.cta-list li:last-child{border-bottom:none}
+.cta-list li::before{content:"\2192";position:absolute;left:0;color:rgba(255,255,255,0.6);font-weight:700}
+.cta-tijdlijn{font-size:12px;opacity:0.65;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);font-style:italic}
+.reken{background:var(--wit);padding:24px 40px;border-bottom:1px solid var(--grijs)}
+.reken-tekst{font-size:14px;line-height:1.7;color:var(--tekst)}
+.reken-tekst strong{font-family:"Fraunces",serif;font-size:16px;display:block;margin-bottom:6px;color:var(--g)}
+.afsluiting{background:var(--bg);padding:20px 40px;border-bottom:1px solid var(--grijs);font-size:14px;line-height:2}
+.footer{background:var(--g);padding:16px 40px;display:flex;justify-content:space-between;align-items:center}
+.footer-m{color:#fff;font-size:14px;font-weight:600}
+.footer-k{color:rgba(255,255,255,0.4);font-size:10px;text-align:right;line-height:1.6}
+@media(max-width:600px){
+  .hdr,.score-blok,.cap-blok,.sectie,.cta-groen,.reken,.afsluiting,.footer{padding-left:20px;padding-right:20px}
+  .score-blok{flex-direction:column;align-items:flex-start;gap:16px}
+  .pos-rij{grid-template-columns:1fr auto;gap:8px}
+  .pos-detail{display:none}
+  .subscore{grid-template-columns:1fr 80px 58px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="logo-cirkel">JCR</div>
+    <div>
+      <div class="hdr-naam">JCR Services</div>
+      <div class="hdr-sub">Spijkenisse, Zuid-Holland &mdash; jcrservices.nl</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-lbl">AI-Vindbaarheid Rapport</div>
+    <div class="hdr-datum">5 juni 2026</div>
+  </div>
+</div>
+
+<div class="score-blok">
+  <div>
+    <div class="score-cirkel">
+      <div class="score-nr">18</div>
+      <div class="score-van">VAN 100</div>
+    </div>
+    <div class="legenda">
+      <div class="lb r"></div><div class="lb o"></div><div class="lb gn"></div>
+    </div>
+    <div class="leg-labels">
+      <span class="leg-l">0</span><span class="leg-l">60</span><span class="leg-l">80</span><span class="leg-l">100</span>
+    </div>
+  </div>
+  <div class="score-tekst">
+    <h2>Onzichtbaar voor AI</h2>
+    <p>JCR Services heeft een nette website met goed fotomateriaal, maar ontbreekt volledig op Google als vindbare bron. Zonder Google Bedrijfsprofiel, zonder externe vermeldingen en zonder lokale content is er geen enkele reden voor ChatGPT of Google om je aan te bevelen als iemand zoekt naar een klusbedrijf in Spijkenisse.</p>
+  </div>
+</div>
+
+<div class="cap-blok">
+  <strong>Waarom deze score maximaal 70 punten haalt:</strong> Je hebt geen Google Bedrijfsprofiel. Zonder dat profiel mist Google de lokale ankerpunten die nodig zijn om je te koppelen aan zoekopdrachten in Spijkenisse en omgeving. Dat is de harde grens totdat dat profiel er staat.
+</div>
+
+<div class="sectie">
+  <div class="s-kop">Waar sta je nu in ChatGPT en Google?</div>
+  <div class="pos-rij">
+    <div class="pos-term">"Klusbedrijf"</div>
+    <div class="pos-detail">Geen GBP aanwezig. Localo-meting niet mogelijk zonder profiel. Concurrenten in Spijkenisse zijn wel vindbaar via hun GBP.</div>
+    <div class="badge badge-r">Niet zichtbaar</div>
+  </div>
+  <div class="pos-rij">
+    <div class="pos-term">"Verbouwing"</div>
+    <div class="pos-detail">Geen GBP aanwezig. Website indexeerbaar maar zonder lokale signalen niet te tracken via Localo.</div>
+    <div class="badge badge-r">Niet zichtbaar</div>
+  </div>
+  <div class="pos-box pos-betekent">
+    <strong>Wat dit betekent:</strong> Wie nu in Spijkenisse of omgeving zoekt naar een klusbedrijf, verbouwing of renovatie ziet jou niet. ChatGPT en Google gebruiken het Google Bedrijfsprofiel als primaire bron voor lokale aanbevelingen. Zonder dat profiel besta je niet voor hen.
+  </div>
+  <div class="pos-box pos-kans">
+    <strong>Kans:</strong> De concurrentie voor klusbedrijven in Spijkenisse is relatief laag. Wie als eerste een volledig ingericht profiel heeft met reviews, staat snel bovenaan. De website is al aanwezig en indexeerbaar. Dat is een stevige voorsprong op concurrenten zonder website.
+  </div>
+</div>
+
+<div class="sectie">
+  <div class="s-kop">Score per onderdeel</div>
+
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Je website als vindbare bron</div>
+      <div class="pijler-tot" style="color:var(--o)">14 van 25 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Eigen website actief</div>
+      <div class="balk-wrap"><div class="balk g" style="width:100%"></div></div>
+      <div class="ss-pts g">10 van 10</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Google kan je site volledig lezen</div>
+      <div class="balk-wrap"><div class="balk o" style="width:50%"></div></div>
+      <div class="ss-pts o">4 van 8</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Duidelijke diensten op je site</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 7</div>
+    </div>
+    <div class="ss-blokkade">Website is een one-pager zonder aparte dienstpagina's. Stad ontbreekt in H1 en H2. Geen FAQ-sectie aanwezig.</div>
+  </div>
+
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Je Google-profiel en lokale herkenbaarheid</div>
+      <div class="pijler-tot" style="color:var(--r)">0 van 25 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Profiel volledig ingevuld</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 9</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Gegevens overal hetzelfde</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 8</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Duidelijk wie je bent en wat je doet</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 5</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Praktische details ingevuld</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 3</div>
+    </div>
+    <div class="ss-blokkade">Geen Google Bedrijfsprofiel gevonden. Dit is de grootste blokkade voor AI-vindbaarheid. Maximale score is 70 punten totdat dit profiel bestaat.</div>
+  </div>
+
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Bewijs dat je goed werk levert</div>
+      <div class="pijler-tot" style="color:var(--o)">4 van 20 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Diensten concreet beschreven</div>
+      <div class="balk-wrap"><div class="balk o" style="width:43%"></div></div>
+      <div class="ss-pts o">3 van 7</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Lokale voorbeelden aanwezig</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 6</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Fotos en cases van je werk</div>
+      <div class="balk-wrap"><div class="balk o" style="width:20%"></div></div>
+      <div class="ss-pts o">1 van 5</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Teksten specifiek en herkenbaar</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 2</div>
+    </div>
+    <div class="ss-blokkade">Foto's zijn aanwezig op de website maar als afbeeldingen zonder tekst of context. Reviews staan als plaatjes, niet als leesbare tekst voor Google.</div>
+  </div>
+
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Reviews, reacties en vertrouwen</div>
+      <div class="pijler-tot" style="color:var(--r)">0 van 20 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Recente reviews aanwezig</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 7</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Reviews zeggen iets concreets</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 5</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Je reageert op reviews</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 4</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Externe bewijzen van kwaliteit</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 4</div>
+    </div>
+    <div class="ss-blokkade">Geen vindbare Google-reviews. Reviews op de website zijn opgeslagen als afbeeldingen, niet leesbaar voor Google of ChatGPT.</div>
+  </div>
+
+  <div class="pijler">
+    <div class="pijler-hdr">
+      <div class="pijler-naam">Actueel, zichtbaar en bereikbaar</div>
+      <div class="pijler-tot" style="color:var(--r)">0 van 10 punten</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Profiel en site up-to-date</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 3</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Echte fotos en video</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 3</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Makkelijk contact opnemen</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 3</div>
+    </div>
+    <div class="subscore">
+      <div class="ss-naam">Bijhouden wat werkt</div>
+      <div class="balk-wrap"><div class="balk r" style="width:0%"></div></div>
+      <div class="ss-pts r">0 van 1</div>
+    </div>
+    <div class="ss-blokkade">Geen GBP, geen Search Console, geen analytics-spoor. Er is geen manier om te meten of iemand je website vindt via Google.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sectie">
+  <div class="s-kop">Wat er beter kan</div>
+
+  <div class="vp-intro">
+    Google en ChatGPT beoordelen bij elke zoekopdracht opnieuw of jouw bedrijf een betrouwbare en relevante bron is. Dit zijn de actiepunten die je een betere uitgangspositie geven voor "klusbedrijf" en "verbouwing" in Spijkenisse.
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Je website als vindbare bron</div>
+    <div class="vp-punt">Voeg de stad toe aan je belangrijkste teksten. De H1 van je website zegt nu "Welkom bij JCR Services". Dat had moeten zijn: "Klusbedrijf in Spijkenisse en omgeving". Google koppelt je nu nergens aan een locatie, waardoor lokale zoekopdrachten je niet bereiken.</div>
+    <div class="vp-punt">Maak aparte pagina's aan voor je drie hoofddiensten: afbouw, verbouw en renovatie. Schrijf per pagina 200 tot 300 woorden met wat je doet, voor wie en in welke regio. Een one-pager zonder losse dienstpagina's wordt door Google gezien als te dun om bovenaan te zetten.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Je Google-profiel en lokale herkenbaarheid</div>
+    <div class="vp-punt">Maak vandaag nog een Google Bedrijfsprofiel aan via business.google.com. Vul in: bedrijfsnaam, adres, telefoon, website, primaire categorie "Klusbedrijf" en de diensten afbouw, verbouw en renovatie. Dit is stap een en alles begint hiermee.</div>
+    <div class="vp-punt">Meld je aan op Telefoonboek.nl en Bing Places for Business met exact dezelfde naam, adres en telefoon als in je Google-profiel. ChatGPT gebruikt Bing als databron, dus zonder Bing-profiel ben je ook onzichtbaar voor AI-aanbevelingen.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Bewijs dat je goed werk levert</div>
+    <div class="vp-punt">Zet je bestaande reviews om van afbeeldingen naar leesbare tekst op je website. Google kan afbeeldingen niet lezen. Een reviewtekst als lopende alinea telt wel mee als bewijs van kwaliteit. Je hebt al goede reviews, je moet ze alleen leesbaar maken.</div>
+    <div class="vp-punt">Voeg bij elke projectfoto een korte zin toe: wat was de klus, in welke stad, wat was het resultaat. "Badkamerrenovatie in Spijkenisse, compleet van sloop tot oplevering in 8 dagen." Dat is de lokale bewijslaag die Google gebruikt om je te koppelen aan zoekopdrachten.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Reviews, reacties en vertrouwen</div>
+    <div class="vp-punt">Stuur na elke klus een bericht naar de klant met een directe link naar je Google-reviewpagina. Zodra je GBP staat, heb je die link. Vijf reviews in de eerste maand veranderen al hoe Google je ziet ten opzichte van concurrenten zonder reviews.</div>
+    <div class="vp-punt">Reageer op elke review die binnenkomt, ook de korte positieve. Een reactie met de naam van de klant en een verwijzing naar het type klus laat zien dat er een actief bedrijf achter het profiel zit.</div>
+  </div>
+
+  <div class="vp-sectie">
+    <div class="vp-titel">Actueel, zichtbaar en bereikbaar</div>
+    <div class="vp-punt">Installeer Google Search Console via search.google.com/search-console en koppel hem aan jcrservices.nl. Dit is gratis en laat je zien via welke zoektermen mensen je site bezoeken. Nu weet je niet of iemand je ooit vindt via Google.</div>
+    <div class="vp-punt">Voeg een telefoonnummer toe dat direct zichtbaar is bovenaan je website, ook op mobiel. Je nummer staat nu alleen onderaan de pagina. Wie je vindt via Google wil in twee tikken bellen, niet scrollen naar het einde van een lange pagina.</div>
+  </div>
+
+  <div class="prognose-inline">
+    <div class="prognose-pijl">&#8599;</div>
+    <div>Bij volledige uitvoering stijgt je score naar <strong>70 van 100 punten</strong>. Zodra het Google Bedrijfsprofiel actief is en de eerste reviews binnenkomen, geeft dit je een betere uitgangspositie voor "klusbedrijf" en "verbouwing" in Spijkenisse. Geen garantie, wel een meetbaar sterkere positie dan nu.</div>
+  </div>
+</div>
+
+<div class="cta-groen">
+  <h3>Wil je jouw score verhogen en wil je daar hulp bij?</h3>
+  <p class="cta-sub">Wij kunnen dit alles structureel voor je verzorgen, maandelijks, zodat jij je alleen op je werk hoeft te focussen. Dit is alles wat wij nodig hebben om te starten:</p>
+  <ul class="cta-list">
+    <li>10 minuten voor een korte vragenlijst die wij je toesturen</li>
+    <li>Jouw akkoord om het Google Bedrijfsprofiel namens jou aan te maken en in te richten</li>
+  </ul>
+  <div class="cta-tijdlijn">Bij goede uitvoering merk je binnen 8 tot 12 weken verschil in het aantal directe aanvragen via Google en ChatGPT.</div>
+</div>
+
+<div class="reken">
+  <div class="reken-tekst">
+    <strong>Een extra klus per maand dekt de volledige investering ruimschoots.</strong>
+    Een gemiddelde verbouwings- of renovatieklus levert je 300 tot 800 euro op. Wie je vindt via ChatGPT of Google belt je rechtstreeks. Geen Werkspot, geen commissie.
+  </div>
+</div>
+
+<div class="afsluiting">
+  <strong>Roland</strong><br>
+  06-20899392<br>
+  aigekozen.nl
+</div>
+
+<div class="footer">
+  <div class="footer-m">Aigekozen.nl</div>
+  <div class="footer-k">Rapport gegenereerd op 5 juni 2026<br>Score is een praktische indicatie op basis van publieke data en aangeleverde informatie. Geen garantie op vermelding in Google AI Overviews, Gemini, ChatGPT of andere AI-systemen.</div>
+</div>
+
+</body>
+</html>
